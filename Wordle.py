@@ -13,12 +13,10 @@ from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
 def wordle():
 
     def enter_action(s):
-
         #function that gets the word from the squares and makes it a word
         def createWord():
             # Array that stores the letters in the squares before these letters are combined into a word
             guessArray = []
-
             #check to see if the word the user entered is a real word (in the word list)
             for guessLetter in range(N_COLS):
                 guessArray.append(gw.get_square_letter(0, guessLetter))
@@ -27,20 +25,26 @@ def wordle():
             word = ''.join(guessArray).lower()
             return word
         
-        guessWord = createWord()
+        
+
+        # initialized English word list dictionary
         wordList = FIVE_LETTER_WORDS
 
+        # pick a word to guess from the word list provided in the WordleDictionary.py
+        correctWord = random.choice(wordList).upper()
+
+        #Calls createWord function to pull user input guess
+        guessWord = createWord()
+
+        #Go through letter in the word 
+        for letter in range(N_COLS):
+            gw.set_square_letter(N_ROWS-1, letter, correctWord[letter])
+
+        # Check to see if
         if guessWord in wordList:
-            # pick a word to guess from the word list provided in the WordleDictionary.py
-            correctWord = random.choice(wordList).upper()
-
-            #Go through letter in the word 
-            for letter in range(N_COLS):
-                gw.set_square_letter(N_ROWS-1, letter, correctWord[letter])
-
-            gw.show_message("slay thats a word")
+            gw.show_message("Slay thats a word")
         else:
-            gw.show_message("Thats not a word stupid!")
+            gw.show_message("Not in word list")
 
 
 
