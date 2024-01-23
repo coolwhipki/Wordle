@@ -98,7 +98,10 @@ def wordle():
 
 
 
+    # Access to the WordleGWindow object in WordleGraphics.py methods
     gw = WordleGWindow()
+    
+    # adds enter_action to enter_listener so when you press enter it runs logic
     gw.add_enter_listener(enter_action)
 
 
