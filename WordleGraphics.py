@@ -206,6 +206,19 @@ class WordleGWindow:
         self._message.set_text(msg, color)
 
 
+
+#CHAT STUFF FOR TOGGLE COLORBLIND BUTTON (Doesn't work yet lol) - Kira**********************************************
+# Create a colorblind mode toggle button
+        self.colorblind_button = tkinter.Button(self.root, text="Colorblind Mode", command=self.toggle_colorblind)
+        self.colorblind_button.pack()
+
+        # ... (Your existing code)
+
+    def toggle_colorblind(self):
+        # Implement the colorblind mode toggle logic here
+        pass
+#*******************************************************************************************************************
+
 class WordleSquare:
 
     def __init__(self, canvas, row, col):
