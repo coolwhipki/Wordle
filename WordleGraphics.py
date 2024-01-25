@@ -110,7 +110,7 @@ class WordleGWindow:
                 self.show_message("")
                 s = ""
                 for col in range(N_COLS):
-                    s += self._grid[self._row][col].get_letter();
+                    s += self._grid[self._row][col].get_letter()
                 for fn in self._enter_listeners:
                     fn(s)
             elif ch.isalpha():
@@ -119,6 +119,13 @@ class WordleGWindow:
                     sq = self._grid[self._row][self._col]
                     sq.set_letter(ch)
                     self._col += 1
+            elif ch == "BACKSPACE":
+                self.show_message("")
+                if self._row < N_ROWS and self._col > 0:
+                    self._col -= 1
+                    sq = self._grid[self._row][self._col]
+                    sq.set_letter(" ")
+
 
         def press_action(tke):
             self._down_x = tke.x
