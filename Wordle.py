@@ -32,7 +32,6 @@ def wordle():
             return word
         
         
-
         #Calls createWord function to pull user input guess
         guessWord = createWord()
 
