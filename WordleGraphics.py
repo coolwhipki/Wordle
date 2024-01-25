@@ -34,6 +34,8 @@ SQUARE_FONT = ("Helvetica Neue", -44, "bold")
 MESSAGE_FONT = ("Helvetica Neue", -20, "bold")
 KEY_FONT = ("Helvetica Neue", -18)
 ENTER_FONT = ("Helvetica Neue", -14)
+COLORBLIND_FONT = ("Helvetica Neue", 7)
+
 
 KEY_WIDTH = 40
 KEY_HEIGHT = 60
@@ -209,6 +211,27 @@ class WordleGWindow:
 
     def show_message(self, msg, color="Black"):
         self._message.set_text(msg, color)
+#*********************************************************************************************************************************
+        def create_color_blind_button():
+            return WordleKey(self._canvas,
+                             CANVAS_WIDTH - 55 - KEY_XSEP,
+                             KEY_YSEP,
+                             55,
+                             KEY_HEIGHT,
+                             "ColorBlind")
+
+        self._color_blind_button = create_color_blind_button()
+        self._color_blind_mode = False
+
+
+    def toggle_color_blind_mode(self):
+        self._color_blind_mode = not self._color_blind_mode
+        color = UNKNOWN_COLOR if not self._color_blind_mode else MISSING_COLOR
+        self._color_blind_button.set_color(color)
+
+    def is_color_blind_mode_on(self):
+        return self._color_blind_mode
+#*********************************************************************************************************************************
 
 
 
@@ -301,6 +324,11 @@ class WordleKey:
         self._canvas.itemconfig(self._frame, fill=color)
         self._canvas.itemconfig(self._text, fill=fg)
 
+
+#*****************************************************************************************************
+    def bind_click_event(self, callback):
+        self._canvas.tag_bind(self._frame, "<Button-1>", lambda event: callback())
+#*****************************************************************************************************
 
 class WordleMessage:
 
