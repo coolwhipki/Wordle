@@ -285,7 +285,7 @@ class WordleKey:
         if label == "DELETE":
             label = "\u232B"
         if label == "ColorBlind":
-            label = COLORBLIND_FONT
+            font = COLORBLIND_FONT
         points = [ x + KEY_CORNER, y,
                    x + KEY_CORNER, y,
                    x + width - KEY_CORNER, y,
