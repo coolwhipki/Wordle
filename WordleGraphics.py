@@ -20,6 +20,8 @@ PRESENT_COLOR = "#CCBB66"       # Brownish yellow for misplaced letters
 MISSING_COLOR = "#999999"       # Gray for letters that don't appear
 UNKNOWN_COLOR = "#FFFFFF"       # Undetermined letters are white
 KEY_COLOR = "#DDDDDD"           # Keys are colored light gray
+CB_ON = '#A5A5A5'
+CB_OFF = '#DDDDDD'
 
 CANVAS_WIDTH = 500		# Width of the tkinter canvas (pixels)
 CANVAS_HEIGHT = 700		# Height of the tkinter canvas (pixels)
@@ -51,6 +53,7 @@ KEY_LABELS = [
 
 CLICK_MAX_DISTANCE = 2
 CLICK_MAX_DELAY = 0.5
+COLORBLIND_CLICK_MAX_DELAY = 0.01
 
 # Derived constants
 
@@ -73,6 +76,9 @@ class WordleGWindow:
                 ] for i in range(N_ROWS)
             ]
 
+        #ColorBlind attribute
+        self._colorBlind = False
+
         def create_keyboard():
             keys = { }
             nk = len(KEY_LABELS[0])
@@ -90,6 +96,15 @@ class WordleGWindow:
                         w += (KEY_WIDTH + KEY_XSEP) / 2
                     keys[label] = WordleKey(self._canvas, x, y, w, h, label)
                     x += w + KEY_XSEP
+
+            #Creation of ColorBlind Button
+            keys['ColorBlind'] = WordleKey(self._canvas,
+                        CANVAS_WIDTH - 55 - KEY_XSEP,
+                        KEY_YSEP,
+                        55,
+                        KEY_HEIGHT,
+                        "ColorBlind",
+                        command=self.toggle_color_blind)
             return keys
 
         def create_message():
@@ -103,6 +118,7 @@ class WordleGWindow:
                 else:
                     ch = tke.char.upper()
 
+
                 # Backspace Functionality:
                 # ord(ch) == 8: corrisponds to the backspace key on the keyboard 
                 if ch == "\007" or ch == "\177" or ch == "\x1b[3~" or ch == "\b":
@@ -112,6 +128,11 @@ class WordleGWindow:
                         sq = self._grid[self._row][self._col]
                         sq.set_letter(" ")
 
+            #If key is colorblind key then functionality of it is the toggle_color_blind button is called      
+            #******************************************
+                elif ch == "COLORBLIND":
+                    self.toggle_color_blind()
+            #*****************************************
                 # Enter Functionality:
                 elif ch == "\r" or ch == "\n" or ch == "ENTER":
                     self.show_message("")
@@ -127,6 +148,7 @@ class WordleGWindow:
                         sq.set_letter(ch)
                         self._col += 1
 
+
         def press_action(tke):
             self._down_x = tke.x
             self._down_y = tke.y
@@ -139,7 +161,12 @@ class WordleGWindow:
                     if t - self._down_time < CLICK_MAX_DELAY:
                         key = find_key(tke.x, tke.y)
                         if key:
-                            key_action(key._label)
+                            if key._label == "ColorBlind":
+                                if t - self._down_time < COLORBLIND_CLICK_MAX_DELAY:
+                                    key_action(key._label)
+                            else:
+                                if t - self._down_time < CLICK_MAX_DELAY:
+                                    key_action(key._label)
 
         def find_key(x, y):
             for key in self._keys.values():
@@ -211,30 +238,26 @@ class WordleGWindow:
 
     def show_message(self, msg, color="Black"):
         self._message.set_text(msg, color)
-#*********************************************************************************************************************************
-        #Creation of button
-        def create_color_blind_button():
-            return WordleKey(self._canvas,
-                             CANVAS_WIDTH - 55 - KEY_XSEP,
-                             KEY_YSEP,
-                             55,
-                             KEY_HEIGHT,
-                             "ColorBlind")
 
-        # attributes of class
-        self._color_blind_button = create_color_blind_button()
-        self._color_blind_mode = False
 
+#****************************************************************
+    #functionality of button
+    def toggle_color_blind(self):
+        print("Button was clicked")
+
+       
+        if self._colorBlind:
+            self._colorBlind = False
+            self._keys['ColorBlind'].set_color(CB_OFF)
+        else:
+            self._colorBlind = True
+            self._keys['ColorBlind'].set_color(CB_ON)
 
     
-    def toggle_color_blind_mode(self):
-        self._color_blind_mode = not self._color_blind_mode
-        color = UNKNOWN_COLOR if not self._color_blind_mode else MISSING_COLOR
-        self._color_blind_button.set_color(color)
-
-    def is_color_blind_mode_on(self):
-        return self._color_blind_mode
-#*********************************************************************************************************************************
+    def colorBlind_status(self):
+        return self._colorBlind
+    
+#****************************************************************
 
 
 
@@ -277,7 +300,7 @@ class WordleSquare:
 
 class WordleKey:
 
-    def __init__(self, canvas, x, y, width, height, label):
+    def __init__(self, canvas, x, y, width, height, label, command=None):
         self._canvas = canvas
         self._label = label
         self._bounds = [ x, y, width, height ]
@@ -317,6 +340,9 @@ class WordleKey:
                                         y + height / 2,
                                         text=label,
                                         font=font)
+        
+        if command is not None:
+            self._canvas.tag_bind(self._frame, "<Button-1>", lambda event: command())
 
     def get_color(self):
         return self._color
@@ -326,14 +352,15 @@ class WordleKey:
         fg = "White"
         if color == UNKNOWN_COLOR:
             fg = "Black"
+        if color in (CB_OFF, CB_ON):
+            fg = "Black"
         self._canvas.itemconfig(self._frame, fill=color)
         self._canvas.itemconfig(self._text, fill=fg)
+        
 
 
-#*****************************************************************************************************
-    def bind_click_event(self, callback):
-        self._canvas.tag_bind(self._frame, "<Button-1>", lambda event: callback())
-#*****************************************************************************************************
+
+
 
 class WordleMessage:
 

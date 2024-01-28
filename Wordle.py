@@ -48,7 +48,7 @@ def wordle():
             present_letters_matched = [False] * N_COLS
 
             # If the user has checked the color blind option it changes the colors for boxes
-            colorBlind = gw._toggle_var.get()
+            colorBlind = gw.colorBlind_status()
 
             #if color blind is true then change the colors that are passed to set_square_color to colorblind safe colors
             if colorBlind == True:
