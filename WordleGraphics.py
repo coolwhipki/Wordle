@@ -212,6 +212,7 @@ class WordleGWindow:
     def show_message(self, msg, color="Black"):
         self._message.set_text(msg, color)
 #*********************************************************************************************************************************
+        #Creation of button
         def create_color_blind_button():
             return WordleKey(self._canvas,
                              CANVAS_WIDTH - 55 - KEY_XSEP,
@@ -220,10 +221,12 @@ class WordleGWindow:
                              KEY_HEIGHT,
                              "ColorBlind")
 
+        # attributes of class
         self._color_blind_button = create_color_blind_button()
         self._color_blind_mode = False
 
 
+    
     def toggle_color_blind_mode(self):
         self._color_blind_mode = not self._color_blind_mode
         color = UNKNOWN_COLOR if not self._color_blind_mode else MISSING_COLOR
