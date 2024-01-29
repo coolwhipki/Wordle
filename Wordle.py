@@ -94,7 +94,7 @@ def wordle():
         # If the word is not in the word list (not an english word) does not run all the checks
         else:
             gw.show_message("Not in word list")
-
+            
         gw.show_message("The word was " + correctWord)
 
     print(correctWord)
