@@ -95,7 +95,7 @@ def wordle():
         else:
             gw.show_message("Not in word list")
             
-        gw.show_message("The word was " + correctWord)
+        # gw.show_message("The word was " + correctWord)
 
     print(correctWord)
 

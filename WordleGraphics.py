@@ -130,7 +130,7 @@ class WordleGWindow:
 
             #If key is colorblind key then functionality of it is the toggle_color_blind button is called      
             #******************************************
-                elif ch == "COLORBLIND":
+                elif ch == "COLORBLIND" or ch == '\t':
                     self.toggle_color_blind()
             #*****************************************
                 # Enter Functionality:
