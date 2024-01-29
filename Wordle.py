@@ -37,8 +37,8 @@ def wordle():
 
         if guessWord in wordList:
             #Go through letter in the word print to last row
-            for letter in range(N_COLS):
-                gw.set_square_letter(N_ROWS-1, letter, correctWord[letter].upper())
+            # for letter in range(N_COLS):
+            #     gw.set_square_letter(N_ROWS-1, letter, correctWord[letter].upper())
 
 
 
@@ -89,13 +89,15 @@ def wordle():
             # Didn't guess the right word so moves you down a row and tells you to guess again
             else:
                 gw.set_current_row(gw.get_current_row() + 1)
-                gw.show_message("Guess again, muchacho")
+                gw.show_message("Guess again")
 
         # If the word is not in the word list (not an english word) does not run all the checks
         else:
             gw.show_message("Not in word list")
 
+        gw.show_message("The word was " + correctWord)
 
+    print(correctWord)
 
     # Access to the WordleGWindow object in WordleGraphics.py methods
     gw = WordleGWindow()
@@ -108,3 +110,4 @@ def wordle():
 
 if __name__ == "__main__":
     wordle()
+    
